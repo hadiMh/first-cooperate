@@ -5,7 +5,7 @@
 typedef struct student Student;
 typedef struct lesson Lesson;
 using namespace std;
-
+ 
 struct student {
 	char stuNum[6];
 	string firstname;
