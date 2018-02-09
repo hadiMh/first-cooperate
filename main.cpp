@@ -33,9 +33,56 @@ void createFilesForFirstExecution()
 
 }
 
+void firstPanel()
+{
+    int inputNumber;
+    cout<<" Please choose an action:"<<endl<<endl;
+    cout<<" 1 - student insertion"<<endl;
+    cout<<" 2 - lesson insertion for a student"<<endl;
+    cout<<" 3 - lesson insertion"<<endl;
+    cout<<" 4 - "<<endl;
+    cout<<" 5 - "<<endl;
+    cout<<" 6 - "<<endl;
+    cout<<" 7 - "<<endl;
+    cout<<" 8 - "<<endl;
+    cout<<" 9 - delete a student"<<endl;
+    cout<<" 10- show a student information"<<endl;
+    cout<<" 11- delete a lesson"<<endl;
+    cout<<" 12- exit"<<endl;
+    cin>>inputNumber;
+    switch(inputNumber)
+    {
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 7:
+            break;
+        case 8:
+            break;
+        case 9:
+            break;
+        case 10:
+            break;
+        case 11:
+            break;
+        case 12:
+            break;
+    }
+}
+
 int main()
 {
 	// The line below should be executed just once in the very first execution. then should be commented.
 	createFilesForFirstExecution();
+	firstPanel();
     return 0;
 }
