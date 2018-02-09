@@ -11,6 +11,8 @@ struct student {
     string firstname;
     string lastname;
     string passedLessons;
+	float avg;
+	int unitsSum;
 };
 
 struct lesson {
@@ -18,6 +20,11 @@ struct lesson {
     char lessonName[19];
     int lessonUnit;
     char lessonTeacher[21];
+};
+
+struct cell {
+	struct student stuData;
+	struct cell* nextPtr;
 };
 
 /* Creating 'students' file and 'lessons' file at the very first execution.
