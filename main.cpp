@@ -28,7 +28,7 @@ void meghdardehiavvalie()
 	FILE *file_student=fopen("student.txt","w");
 	for (long long int i = 0; i < 1000000; i++)
 	{
-		fwrite(&pattern_student, sizeof(Student), 1, st);
+		fwrite(&pattern_student, sizeof(Student), 1, file_student);
 	}
 	fclose(file_student);
 	FILE *file_lesson = fopen("course.txt", "w");
