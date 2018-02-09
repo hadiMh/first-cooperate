@@ -62,6 +62,8 @@ int doesThisLessonAlreadyExists(Lesson newSampleStructure, FILE*fileNewLesson)
 }
 /*
 This function scans the information needed for creatng a new lesson
+It returns 1 if it is created successfully
+It returns -1 if it isn't created successfully
 */
 int getInformationForCreatingNewLesson()
 {
@@ -94,9 +96,7 @@ This function is used to create a new lesson
 void createNewLesson()
 {
 	if (getInformationForCreatingNewLesson() == 1)
-	{
 		cout << "This Record has been successfully added!" << endl;
-	}
 	else
 		cout << "Adding a Lesson failed due to entering existing Lesson code!" << endl;
 }
