@@ -149,7 +149,7 @@ void firstPanel()
 /* This function checks if a student with the "stuNum" student number exist in 'students.txt database or not.
    return 1: already exist.
    return 0: doesn't exist */
-int doasThisStudentAlreadyExist(char stuNum[])
+int doesThisStudentAlreadyExist(char stuNum[])
 {
 	Student temp_student = {"","","",""};
 	FILE* file_students = fopen("students.txt","r");
@@ -171,14 +171,14 @@ int newStudent(string firstname, string lastname, char stuNum[])
 {
     FILE* file_students = fopen("students.txt","r+");
 	Student temp_student = {"","","",""};
-	if(doasThisStudentAlreadyExist(stuNum) == 1)
+	if(doesThisStudentAlreadyExist(stuNum) == 1)
 	    return 0;
 	temp_student.firstname = firstname;
 	temp_student.lastname = lastname;
 	strcpy(temp_student.stuNum,stuNum);
 	temp_student.passedLessons = ""; /* just for emphasis */
 	FILE* file_students = fopen("students.txt","r+");
-	while(!feof(file_students));
+	fseek(file_students, 0, SEEK_END);
 	fprintf(file_students,"%s %s %s %s\n",&temp_student.stuNum,&temp_student.firstname,&temp_student.lastname,&temp_student.passedLessons);
 	return 1;
 }
