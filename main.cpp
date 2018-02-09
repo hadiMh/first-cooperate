@@ -32,6 +32,41 @@ void createFilesForFirstExecution()
 	fclose(file_lessons);
 
 }
+/*
+	This function adds a lesson to lesson.txt
+*/
+void Create_New_Lesson()
+{
+	Lesson New_sample_structure, Existing_samples;
+	FILE* File_New_Lesson = fopen("lessons.txt", "r+");
+
+	cout << "Please enter the lesson code (Remember the password must contain less than8 characters!) :" << endl;
+	cin.get(New_sample_structure.leassonCode, 8);
+	cin.ignore(10000, '\n');
+	while (!feof(File_New_Lesson))
+	{
+		fread(&Existing_samples, sizeof(Lesson), 1, File_New_Lesson);
+		if (strcmp(Existing_samples.leassonCode, New_sample_structure.leassonCode) == 0)
+		{
+			cout << "THis lesson code already exists!" << endl;
+			fseek(File_New_Lesson, 0, SEEK_SET);
+			cout << "Please enter the lesson code again(Remember the password must contain less than8 characters!) :" << endl;
+			cin.get(New_sample_structure.leassonCode, 8);
+			cin.ignore(10000, '\n');
+		}
+	}
+	cout << "Now you should enter the lesson name (Name contains at most 18 characters!) :" << endl;
+	cin.get(New_sample_structure.lessonName, 19);
+	cin.ignore(10000, '\n');
+	cout << "Now you should enter the teacher's name:(At most 20 characters !) :" << endl;
+	cin.getline(New_sample_structure.lessonTeacher, 21);
+	cout << "And finally you should enter this lesson's units : " << endl;
+	cin >> New_sample_structure.lessonUnit;
+	cin.ignore(10000, '\n');
+	fseek(File_New_Lesson, 0, SEEK_END);
+	fwrite(&New_sample_structure, sizeof(Lesson), 1, File_New_Lesson);
+	fclose(File_New_Lesson);
+}
 
 void firstPanel()
 {
