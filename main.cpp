@@ -165,21 +165,21 @@ int doesThisStudentAlreadyExist(char stuNum[])
 
 /* This function create a new student in the 'students.txt' file.
    Notice that this function's type isn't void and it return a number.
-   If the student Already exist in database it will return 0.
+   If the student Already exist in database it will return -1.
    If the insertation was successful it will return 1.*/
 int newStudent(string firstname, string lastname, char stuNum[])
 {
     FILE* file_students = fopen("students.txt","r+");
 	Student temp_student = {"","","",""};
 	if(doesThisStudentAlreadyExist(stuNum) == 1)
-	    return 0;
+	    return -1;
 	temp_student.firstname = firstname;
 	temp_student.lastname = lastname;
 	strcpy(temp_student.stuNum,stuNum);
 	temp_student.passedLessons = ""; /* just for emphasis */
 	FILE* file_students = fopen("students.txt","r+");
 	fseek(file_students, 0, SEEK_END);
-	fprintf(file_students,"%s %s %s %s\n",&temp_student.stuNum,&temp_student.firstname,&temp_student.lastname,&temp_student.passedLessons);
+	fprintf(file_students,"%s %s %s %s\n",temp_student.stuNum,temp_student.firstname,temp_student.lastname,temp_student.passedLessons);
 	return 1;
 }
 
