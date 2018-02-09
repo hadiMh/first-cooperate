@@ -29,77 +29,42 @@ void createFilesForFirstExecution()
 	fclose(file_lessons);
 
 }
-/* Creating 'students' file and 'lessons' file at the very first execution.
-This function should be executed once at the very first execution of the software so be careful.
-After firs execution of the software comment this function's name in the 'main' scope*/
-void createFilesForFirstExecution()
-{
-	FILE* file_students = fopen("students.txt", "w");
-	fclose(file_students);
-	FILE* file_lessons = fopen("lessons.txt", "w");
-	fclose(file_lessons);
-
-}
 /*
-This function check wheter the lesson we are trying to add already exists or not
-returns 1 if it doesn't exist
-returns -1 if it already exists
+	This function adds a lesson to lesson.txt
 */
-int doesThisLessonAlreadyExists(Lesson newSampleStructure, FILE*fileNewLesson)
+void Create_New_Lesson()
 {
-	Lesson existingSamples;
-	while (!feof(fileNewLesson))
-	{
-		fscanf(fileNewLesson, "%s %s %d %s\n", &existingSamples.leassonCode, &existingSamples.lessonName, &existingSamples.lessonUnit, &existingSamples.lessonTeacher);
+	Lesson New_sample_structure, Existing_samples;
+	FILE* File_New_Lesson = fopen("lessons.txt", "r+");
 
-		if (strcmp(existingSamples.leassonCode, newSampleStructure.leassonCode) == 0)
+	cout << "Please enter the lesson code (Remember the password must contain less than8 characters!) :" << endl;
+	cin.get(New_sample_structure.leassonCode, 8);
+	cin.ignore(10000, '\n');
+	while (!feof(File_New_Lesson))
+	{
+		fread(&Existing_samples, sizeof(Lesson), 1, File_New_Lesson);
+		if (strcmp(Existing_samples.leassonCode, New_sample_structure.leassonCode) == 0)
 		{
 			cout << "THis lesson code already exists!" << endl;
-			return -1;
+			fseek(File_New_Lesson, 0, SEEK_SET);
+			cout << "Please enter the lesson code again(Remember the password must contain less than8 characters!) :" << endl;
+			cin.get(New_sample_structure.leassonCode, 8);
+			cin.ignore(10000, '\n');
 		}
 	}
-	return 1;
-}
-/*
-This function scans the information needed for creatng a new lesson
-It returns 1 if it is created successfully
-It returns -1 if it isn't created successfully
-*/
-int getInformationForCreatingNewLesson()
-{
-	FILE* fileNewLesson = fopen("lessons.txt", "r+");
-	Lesson newSampleStructure, existingSamples;
-	cout << "Please enter the lesson code (Remember the code must contain less than8 characters!) :" << endl;
-	cin.get(newSampleStructure.leassonCode, 8);
-	cin.ignore(10000, '\n');
-	if (doesThisLessonAlreadyExists(newSampleStructure, fileNewLesson) == -1)
-	{
-		fclose(fileNewLesson);
-		return -1;
-	}
 	cout << "Now you should enter the lesson name (Name contains at most 18 characters!) :" << endl;
-	cin.get(newSampleStructure.lessonName, 19);
+	cin.get(New_sample_structure.lessonName, 19);
 	cin.ignore(10000, '\n');
 	cout << "Now you should enter the teacher's name:(At most 20 characters !) :" << endl;
-	cin.getline(newSampleStructure.lessonTeacher, 21);
+	cin.getline(New_sample_structure.lessonTeacher, 21);
 	cout << "And finally you should enter this lesson's units : " << endl;
-	cin >> newSampleStructure.lessonUnit;
+	cin >> New_sample_structure.lessonUnit;
 	cin.ignore(10000, '\n');
-	fseek(fileNewLesson, 0, SEEK_END);
-	fprintf(fileNewLesson, "%s %s %d %s\n", newSampleStructure.leassonCode, newSampleStructure.lessonName, newSampleStructure.lessonUnit, newSampleStructure.lessonTeacher);
-	fclose(fileNewLesson);
-	return 1;
+	fseek(File_New_Lesson, 0, SEEK_END);
+	fwrite(&New_sample_structure, sizeof(Lesson), 1, File_New_Lesson);
+	fclose(File_New_Lesson);
 }
-/*
-This function is used to create a new lesson
-*/
-void createNewLesson()
-{
-	if (getInformationForCreatingNewLesson() == 1)
-		cout << "This Record has been successfully added!" << endl;
-	else
-		cout << "Adding a Lesson failed due to entering existing Lesson code!" << endl;
-}
+
 void firstPanel()
 {
     int inputNumber;
@@ -149,7 +114,7 @@ void firstPanel()
 /* This function checks if a student with the "stuNum" student number exist in 'students.txt database or not.
    return 1: already exist.
    return 0: doesn't exist */
-int doasThisStudentAlreadyExist(char stuNum[])
+int doesThisStudentAlreadyExist(char stuNum[])
 {
 	Student temp_student = {"","","",""};
 	FILE* file_students = fopen("students.txt","r");
@@ -171,7 +136,7 @@ int newStudent(string firstname, string lastname, char stuNum[])
 {
     FILE* file_students = fopen("students.txt","r+");
 	Student temp_student = {"","","",""};
-	if(doasThisStudentAlreadyExist(stuNum) == 1)
+	if(doesThisStudentAlreadyExist(stuNum) == 1)
 	    return 0;
 	temp_student.firstname = firstname;
 	temp_student.lastname = lastname;
