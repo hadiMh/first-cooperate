@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+
 typedef struct student Student;
 typedef struct lesson Lesson;
 using namespace std;
@@ -135,41 +137,42 @@ void firstPanel()
             break;
     }
 }
-
 /* This function checks if a student with the "stuNum" student number exist in 'students.txt database or not.
-   return 1: already exist.
-   return 0: doesn't exist */
-int doesThisStudentAlreadyExist(char stuNum[])
+return 1: already exist.
+return 0: doesn't exist */
+int doesThisStudentAlreadyExist(char * stuNum)
 {
-	Student temp_student = {"","","",""};
-	FILE* file_students = fopen("students.txt","r");
-    while(!feof(file_students))
-    {
-        //<<NOTE>>: remember to check that if the line below need ' ' or need to remove '\n' in fscanf.
-        fscanf(file_students,"%s%s%s%s\n",&temp_student.stuNum,&temp_student.firstname,&temp_student.lastname,&temp_student.passedLessons);
-        if(strcmp(stuNum,temp_student.stuNum)==0)
-            return 1;
-    }
-    return 0;
+	Student temp_student = { "","","","" };
+	ifstream file_students;
+	file_students.open("students.txt");
+	while (!file_students.eof())
+	{
+		file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons;
+		if (strcmp(stuNum, temp_student.stuNum) == 0)
+			return 1;
+	}
+	return 0;
 }
-
 /* This function create a new student in the 'students.txt' file.
-   Notice that this function's type isn't void and it return a number.
-   If the student Already exist in database it will return -1.
-   If the insertation was successful it will return 1.*/
+Notice that this function's type isn't void and it return a number.
+If the student Already exist in database it will return -1.
+If the insertation was successful it will return 1.*/
 int newStudent(string firstname, string lastname, char stuNum[])
 {
-	Student temp_student = {"","","",""};
-	if(doesThisStudentAlreadyExist(stuNum) == 1)
-	    return -1;
+	Student temp_student = { "","","","" };
+	if (doesThisStudentAlreadyExist(stuNum) == 1)
+		return -1;
 	temp_student.firstname = firstname;
 	temp_student.lastname = lastname;
-	strcpy(temp_student.stuNum,stuNum);
+	strcpy(temp_student.stuNum, stuNum);
 	temp_student.passedLessons = ""; /* just for emphasis */
-	FILE* file_students = fopen("students.txt","r+");
-	fseek(file_students, 0, SEEK_END);
-	fprintf(file_students,"%s %s %s %s\n",temp_student.stuNum,temp_student.firstname,temp_student.lastname,temp_student.passedLessons);
+	fstream file_students;
+	file_students.open("students.txt");
+	file_students.seekp(0, ios::end);
+	file_students << temp_student.firstname << " " << temp_student.lastname << " " << temp_student.stuNum << " " << temp_student.passedLessons << '\n';
+	file_students.close();
 	return 1;
+
 }
 
 int main()
