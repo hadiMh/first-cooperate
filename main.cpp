@@ -10,9 +10,9 @@ struct student {
 	char stuNum[6];
 	string firstname;
 	string lastname;
-	string passedLessons;
 	float avg;
 	int unitsSum;
+	string passedLessons = "/";
 };
 
 struct lesson {
