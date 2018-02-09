@@ -29,17 +29,7 @@ void createFilesForFirstExecution()
 	fclose(file_lessons);
 
 }
-/* Creating 'students' file and 'lessons' file at the very first execution.
-This function should be executed once at the very first execution of the software so be careful.
-After firs execution of the software comment this function's name in the 'main' scope*/
-void createFilesForFirstExecution()
-{
-	FILE* file_students = fopen("students.txt", "w");
-	fclose(file_students);
-	FILE* file_lessons = fopen("lessons.txt", "w");
-	fclose(file_lessons);
 
-}
 /*
 This function check wheter the lesson we are trying to add already exists or not
 returns 1 if it doesn't exist
@@ -153,7 +143,7 @@ int doesThisStudentAlreadyExist(char stuNum[])
 {
 	Student temp_student = {"","","",""};
 	FILE* file_students = fopen("students.txt","r");
-    While(!feof(file_students))
+    while(!feof(file_students))
     {
         //<<NOTE>>: remember to check that if the line below need ' ' or need to remove '\n' in fscanf.
         fscanf(file_students,"%s%s%s%s\n",&temp_student.stuNum,&temp_student.firstname,&temp_student.lastname,&temp_student.passedLessons);
@@ -169,7 +159,6 @@ int doesThisStudentAlreadyExist(char stuNum[])
    If the insertation was successful it will return 1.*/
 int newStudent(string firstname, string lastname, char stuNum[])
 {
-    FILE* file_students = fopen("students.txt","r+");
 	Student temp_student = {"","","",""};
 	if(doesThisStudentAlreadyExist(stuNum) == 1)
 	    return -1;
