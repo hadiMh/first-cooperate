@@ -37,9 +37,9 @@ void firstPanel()
 {
     int inputNumber;
     cout<<" Please choose an action:"<<endl<<endl;
-    cout<<" 1 - student insertion"<<endl;
+    cout<<" 1 - new student"<<endl;
     cout<<" 2 - lesson insertion for a student"<<endl;
-    cout<<" 3 - lesson insertion"<<endl;
+    cout<<" 3 - new lesson"<<endl;
     cout<<" 4 - "<<endl;
     cout<<" 5 - "<<endl;
     cout<<" 6 - "<<endl;
@@ -78,6 +78,8 @@ void firstPanel()
             break;
     }
 }
+
+
 
 int main()
 {
