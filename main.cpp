@@ -20,23 +20,23 @@ struct lesson {
 };
 void meghdardehiavvalie()
 {
-	Student initial_student = {0,"","",""};
-	FILE *st=fopen("student.txt","w");
+	/*
+	please execute this function in <<main>> only once and the comment it.
+
+	*/
+	Student pattern_student = {0,"","",""};
+	FILE *file_student=fopen("student.txt","w");
 	for (long long int i = 0; i < 1000000; i++)
 	{
-		fwrite(&initial_student, sizeof(Student), 1, st);
+		fwrite(&pattern_student, sizeof(Student), 1, st);
 	}
-	fclose(st);
-	Lesson initial_lesson = { "","",0,"" };
-	FILE *les = fopen("course.txt", "w");
-	for (long long int i = 0; i < 1000000; i++)
-	{
-		fwrite(&initial_lesson, sizeof(Lesson), 1, les);
-	}
-	fclose(les);
+	fclose(file_student);
+	FILE *file_lesson = fopen("course.txt", "w");
+	fclose(file_lesson);
 
 }
 int main()
 {
+	meghdardehiavvalie();
     return 0;
 }
