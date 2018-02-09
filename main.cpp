@@ -28,7 +28,7 @@ void createFilesForFirstExecution()
 	for (long long int i = 0; i < 1000000; i++)
 	   fwrite(&pattern_student, sizeof(Student), 1, file_students);
 	fclose(file_students);
-	FILE* file_lesson = fopen("lessons.txt", "w");
+	FILE* file_lessons = fopen("lessons.txt", "w");
 	fclose(file_lessons);
 
 }
