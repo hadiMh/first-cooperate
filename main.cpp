@@ -23,10 +23,7 @@ struct lesson {
    After firs execution of the software comment this function's name in the 'main' scope*/
 void createFilesForFirstExecution()
 {
-	Student pattern_student = {0,"","",""};
 	FILE* file_students = fopen("students.txt","w");
-	for (long long int i = 0; i < 1000000; i++)
-	   fwrite(&pattern_student, sizeof(Student), 1, file_students);
 	fclose(file_students);
 	FILE* file_lessons = fopen("lessons.txt", "w");
 	fclose(file_lessons);
