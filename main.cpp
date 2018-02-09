@@ -27,6 +27,29 @@ struct cell {
 	struct cell* nextPtr;
 };
 
+Cell* createLinkListOfStudentsFile()
+{
+    Student temp_student = {"", "", "", "", 0.0, 0};
+    ifstream file_students;
+    file_students.open("students.txt");
+    Cell * head, * current, * new;
+    head = (Cell*) malloc(sizeof(Cell));
+    head -> nextPtr = NULL;
+    file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
+    head -> stuData = temp_student;
+    current = head;
+    while(!file_students.eof())
+    {
+        new = (Cell*) malloc(sizeof(Cell));
+        new -> nextPtr = NULL;
+        current -> nextPtr = new;
+        current = new;
+        file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
+        current -> stuData = temp_student;
+    }
+    return head;
+}
+
 /* Creating 'students' file and 'lessons' file at the very first execution.
 This function should be executed once at the very first execution of the software so be careful.
 After firs execution of the software comment this function's name in the 'main' scope*/
