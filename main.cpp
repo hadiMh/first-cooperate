@@ -79,7 +79,40 @@ void firstPanel()
     }
 }
 
+/* This function checks if a student with the "stuNum" student number exist in 'students.txt database or not.
+   return 1: if exist.
+   return 0: if doesn't exist */
+int doasThisStudentAlreadyExist(string stuNum)
+{
+	Student temp_student = {0,"","",""};
+	FILE* file_students = fopen("students.txt","r");
+    fseek(file_students, sizeof(Student)*stuNum, SEEK_SET);
+    fread(&temp_student, sizeof(Student), file_students);
+    fclose(file_students);
+    if(stuNum == temp_student.stuNum)
+        return 1;
+    return 0;
+}
 
+/* This function create a new student in the 'students.txt' file.
+   Notice that this function's type isn't void and it return a number.
+   If the student Already exist in database it will return 0.
+   If the insertation was successful it will return 1.*/
+int newStudent(string firstname, string lastname, long long int stuNum)
+{
+	Student temp_student = {0,"","",""};
+	if(doasThisStudentAlreadyExist == 1)
+	    return 0;
+	temp_student.firstname = firstname;
+	temp_student.lastname = lastname;
+	temp_student.stuNum = stuNum;
+	temp_student.passedLessons = ""; /* just for emphasis */
+	FILE* file_students = fopen("students.txt","r+");
+	fseek(file_students, sizeof(Student)*stuNum, SEEK_SET);
+	fwrite(&temp_student, sizeof(Student), file_students);
+	fclose(file_students);
+	return 1;
+}
 
 int main()
 {
