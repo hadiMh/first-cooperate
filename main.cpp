@@ -149,12 +149,12 @@ return 1: already exist.
 return 0: doesn't exist */
 int doesThisStudentAlreadyExist(char * stuNum)
 {
-	Student temp_student = { "","","","" };
+	Student temp_student = { "", "", "", "", 0.0, 0 };
 	ifstream file_students;
 	file_students.open("students.txt");
 	while (!file_students.eof())
 	{
-		file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons;
+		file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
 		if (strcmp(stuNum, temp_student.stuNum) == 0)
 			return 1;
 	}
@@ -166,17 +166,19 @@ If the student Already exist in database it will return -1.
 If the insertation was successful it will return 1.*/
 int newStudent(string firstname, string lastname, char stuNum[])
 {
-	Student temp_student = { "","","","" };
+	Student temp_student = { "", "", "", "", 0.0, 0 };
 	if (doesThisStudentAlreadyExist(stuNum) == 1)
 		return -1;
 	temp_student.firstname = firstname;
 	temp_student.lastname = lastname;
 	strcpy(temp_student.stuNum, stuNum);
 	temp_student.passedLessons = ""; /* just for emphasis */
+	temp_student.avg = 0.0; /* just for emphasis */
+	temp_student.unitsSum = 0; /* just for emphasis */
 	fstream file_students;
 	file_students.open("students.txt");
 	file_students.seekp(0, ios::end);
-	file_students << temp_student.firstname << " " << temp_student.lastname << " " << temp_student.stuNum << " " << temp_student.passedLessons << '\n';
+	file_students << temp_student.firstname << " " << temp_student.lastname << " " << temp_student.stuNum << " " << temp_student.passedLessons << " " << temp_student.avg << " " << temp_student.unitsSum << '\n';
 	file_students.close();
 	return 1;
 
