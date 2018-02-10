@@ -187,11 +187,14 @@ int doesThisStudentAlreadyExist(char * stuNum)
 	Student temp_student = { "", "", "", "/", 0.0, 0 };
 	ifstream file_students;
 	file_students.open("students.txt");
-	for (int i = 0; i<10000; i++)
+	while(!file_students.eof())
 	{
 		file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
 		if (strcmp(stuNum, temp_student.stuNum) == 0)
+		{
+			cout << "go fuck yourself";
 			return 1;
+		}
 	}
 	file_students.close();
 	return 0;
@@ -227,7 +230,8 @@ int main()
 	//	newStudent("salam","ali", "23456");
 	//	newStudent("hadi", "haji", "44456");
 	//	newStudent("peyman", "hosseini", "44477");
-	createLinkListOfStudentsFile();
+	newStudent("hadi", "haji", "44456");
+	//createLinkListOfStudentsFile();
 	//firstPanel();
 	return 0;
 }
