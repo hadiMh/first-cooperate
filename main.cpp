@@ -34,23 +34,23 @@ Cell* createLinkListOfStudentsFile()
 	ifstream file_students;
 	file_students.open("students.txt");
 	Cell * head, *current, *newCell;
-	head = (Cell*)malloc(sizeof(Cell));
+	head = new cell;
 	head->nextPtr = NULL;
 	file_students >> temp_student.firstname;
 	file_students >> temp_student.lastname;
 	file_students >> temp_student.stuNum;
+	file_students >> temp_student.passedLessons;
 	file_students >> temp_student.avg;
 	file_students >> temp_student.unitsSum;
 	strcpy(head->stuData.stuNum, temp_student.stuNum);
-	head->stuData.firstname = "";
-	head->stuData.firstname += temp_student.firstname;
+	head->stuData.firstname.assign(temp_student.firstname);
 	head->stuData.lastname.assign(temp_student.lastname);
-	head->stuData.passedLessons = temp_student.passedLessons;
+	head->stuData.passedLessons.assign(temp_student.passedLessons);
 	head->stuData.avg = temp_student.avg;
 	head->stuData.unitsSum = temp_student.unitsSum;
 	current = head;
 	for (string line; getline(cin, line); ) {
-		newCell = (Cell*)malloc(sizeof(Cell));
+		newCell = new Cell;
 		newCell->nextPtr = NULL;
 		current->nextPtr = newCell;
 		current = newCell;
@@ -221,7 +221,7 @@ int newStudent(string firstname, string lastname, char stuNum[])
 
 int main()
 {
-	// The line below should be executed just once in the very first execution. then should be commented.
+	/*The line below should be executed just once in the very first execution. then should be commented.*/
 	//	createFilesForFirstExecution();
 	//	newStudent("peymna", "hs", "12345");
 	//	newStudent("salam","ali", "23456");
