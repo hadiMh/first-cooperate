@@ -134,6 +134,106 @@ void createNewLesson()
 	else
 		cout << "Adding a Lesson failed due to entering existing Lesson code!" << endl;
 }
+/*
+This lesson check wheter the entered code was used before or not
+if it existed in string passedlesson it returns -1
+and returns 1 if it isn't used before in passedlesson string
+*/
+int extractingThePassedLessons(Student AddingToPassed, char* AddedLessonCode)
+{
+	char extractedCode[8];
+	int j, k;
+	float extractedGrade;
+	for (int i = 0; i < AddingToPassed.passedLessons.size(); i++)
+	{
+		j = 0;
+		for (; AddingToPassed.passedLessons[i] != '*'; i++)
+		{
+			if (AddingToPassed.passedLessons[i] != '/')
+			{
+				extractedCode[j] = AddingToPassed.passedLessons[i];
+				j++;
+			}
+		}
+		for (; AddingToPassed.passedLessons[i] != '/'; i++);
+		if (strcmp(AddedLessonCode, extractedCode) == 0)
+		{
+			return -1;
+		}
+	}
+	return 1;
+}
+/*
+This function returns the number of units of the lesson we want to add
+and it helps us for calculating the average
+*/
+int numofAddedLessonUnits(Lesson newSampleStructure, FILE*fileNewLesson)
+{
+	int units;
+	Lesson existingSamples;
+	while (!feof(fileNewLesson))
+	{
+		fscanf(fileNewLesson, "%s %s %d %s\n", &existingSamples.leassonCode, &existingSamples.lessonName, &existingSamples.lessonUnit, &existingSamples.lessonTeacher);
+
+		if (strcmp(existingSamples.leassonCode, newSampleStructure.leassonCode) == 0)
+		{
+			units = existingSamples.lessonUnit;
+			return units;
+		}
+	}
+}
+/*
+This function calls createLinkListOfStudentsFile and then modifies it with the new values needed!
+*/
+void linkListForAddingLessontoStudent(Student AddingToPassed)
+{
+	Cell * head = NULL, *current, *newCell;
+	head = createLinkListOfStudentsFile();
+	current = head;
+	while (strcmp(current->stuData.stuNum, AddingToPassed.stuNum) != 0)
+	{
+		current = current->nextPtr;
+	}
+	current->stuData.avg = AddingToPassed.avg;
+	current->stuData.unitsSum = AddingToPassed.unitsSum;
+	current->stuData.passedLessons.assign(AddingToPassed.passedLessons);
+	fstream file_students;
+	file_students.open("students.txt");
+	newCell = head;
+	while (newCell != NULL)
+	{
+		file_students << newCell->stuData.firstname << " " << newCell->stuData.lastname << " " << newCell->stuData.stuNum << " " << newCell->stuData.passedLessons << " " << newCell->stuData.avg << " " << newCell->stuData.unitsSum << '\n';
+		newCell = newCell->nextPtr;
+	}
+	file_students.close();
+}
+/*
+This function adds a lesson to a student's passedlesson string
+*/
+void addingLessonToStudent(Student AddingToPassed, char* AddedLessonCode, float AddedLessonGrade, FILE* lessonFile)
+{
+	Lesson checkingLessonCode;
+	FILE *checkingLesson = fopen("lessons.txt", "r+");
+	strcpy(checkingLessonCode.leassonCode, AddedLessonCode);
+	if (doesThisLessonAlreadyExists(checkingLessonCode, checkingLesson) == 1)
+	{
+		cout << "This Lesson Code doesn't exist!" << endl;
+		return;
+	}
+	if (extractingThePassedLessons(AddingToPassed, AddedLessonCode) == -1)
+	{
+		cout << "There is already a grade for this Lesson code for this student!" << endl;
+		return;
+	}
+	AddingToPassed.avg = ((float)(AddingToPassed.avg*AddingToPassed.unitsSum + numofAddedLessonUnits(checkingLessonCode, checkingLesson))) / (numofAddedLessonUnits(checkingLessonCode, checkingLesson) + AddingToPassed.unitsSum);
+	AddingToPassed.unitsSum += numofAddedLessonUnits(checkingLessonCode, checkingLesson);
+	AddingToPassed.passedLessons += AddedLessonCode;
+	AddingToPassed.passedLessons += "*";
+	AddingToPassed.passedLessons += AddedLessonCode;
+	AddingToPassed.passedLessons += "/";
+	linkListForAddingLessontoStudent(AddingToPassed);
+	cout << "Lesson added for this student successfully!" << endl;
+}
 void firstPanel()
 {
 	int inputNumber;
