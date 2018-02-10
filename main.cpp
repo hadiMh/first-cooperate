@@ -47,6 +47,7 @@ Cell* createLinkListOfStudentsFile()
         file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
         current -> stuData = temp_student;
     }
+    file_students.close();
     return head;
 }
 
@@ -181,6 +182,7 @@ int doesThisStudentAlreadyExist(char * stuNum)
 		if (strcmp(stuNum, temp_student.stuNum) == 0)
 			return 1;
 	}
+	file_students.close();
 	return 0;
 }
 /* This function create a new student in the 'students.txt' file.
@@ -204,7 +206,6 @@ int newStudent(string firstname, string lastname, char stuNum[])
 	file_students << temp_student.firstname << " " << temp_student.lastname << " " << temp_student.stuNum << " " << temp_student.passedLessons << " " << temp_student.avg << " " << temp_student.unitsSum << '\n';
 	file_students.close();
 	return 1;
-
 }
 
 int main()
