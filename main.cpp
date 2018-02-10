@@ -38,13 +38,12 @@ Cell* createLinkListOfStudentsFile()
     file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
     head -> stuData = temp_student;
     current = head;
-    while(!file_students.eof())
-    {
+    for (stringstream line; getline(cin, line); ) {
         new = (Cell*) malloc(sizeof(Cell));
         new -> nextPtr = NULL;
         current -> nextPtr = new;
         current = new;
-        file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
+        line >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
         current -> stuData = temp_student;
     }
     file_students.close();
