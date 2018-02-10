@@ -4,8 +4,9 @@
 
 typedef struct student Student;
 typedef struct lesson Lesson;
+typedef struct cell Cell;
 using namespace std;
- 
+
 struct student {
 	char stuNum[6];
 	string firstname;
@@ -29,25 +30,36 @@ struct cell {
 
 Cell* createLinkListOfStudentsFile()
 {
-    Student temp_student = {"", "", "", "", 0.0, 0};
-    ifstream file_students;
-    file_students.open("students.txt");
-    Cell * head, * current, * new;
-    head = (Cell*) malloc(sizeof(Cell));
-    head -> nextPtr = NULL;
-    file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
-    head -> stuData = temp_student;
-    current = head;
-    for (stringstream line; getline(cin, line); ) {
-        new = (Cell*) malloc(sizeof(Cell));
-        new -> nextPtr = NULL;
-        current -> nextPtr = new;
-        current = new;
-        line >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
-        current -> stuData = temp_student;
-    }
-    file_students.close();
-    return head;
+	Student temp_student = { "", "", "", "", 0.0, 0 };
+	ifstream file_students;
+	file_students.open("students.txt");
+	Cell * head, *current, *newCell;
+	head = (Cell*)malloc(sizeof(Cell));
+	head->nextPtr = NULL;
+	file_students >> temp_student.firstname;
+	file_students >> temp_student.lastname;
+	file_students >> temp_student.stuNum;
+	file_students >> temp_student.avg;
+	file_students >> temp_student.unitsSum;
+	strcpy(head->stuData.stuNum, temp_student.stuNum);
+	head->stuData.firstname = "";
+	head->stuData.firstname += temp_student.firstname;
+	head->stuData.lastname.assign(temp_student.lastname);
+	head->stuData.passedLessons = temp_student.passedLessons;
+	head->stuData.avg = temp_student.avg;
+	head->stuData.unitsSum = temp_student.unitsSum;
+	current = head;
+	for (string line; getline(cin, line); ) {
+		newCell = (Cell*)malloc(sizeof(Cell));
+		newCell->nextPtr = NULL;
+		current->nextPtr = newCell;
+		current = newCell;
+		cout << line;
+		//line >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
+		current->stuData = temp_student;
+	}
+	file_students.close();
+	return head;
 }
 
 /* Creating 'students' file and 'lessons' file at the very first execution.
@@ -214,8 +226,8 @@ int main()
 	//	newStudent("peymna", "hs", "12345");
 	//	newStudent("salam","ali", "23456");
 	//	newStudent("hadi", "haji", "44456");
-	newStudent("peyman", "hosseini", "44477");
-
+	//	newStudent("peyman", "hosseini", "44477");
+	createLinkListOfStudentsFile();
 	//firstPanel();
 	return 0;
 }
