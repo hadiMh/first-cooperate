@@ -34,7 +34,7 @@ Cell* createLinkListOfStudentsFile()
 	Student temp_student = { "", "", "", "", 0.0, 0 };
 	ifstream file_students;
 	file_students.open("students.txt");
-	Cell * head=NULL, *current, *newCell;
+	Cell * head = NULL, *current, *newCell;
 	while (!file_students.eof())
 	{
 		file_students >> temp_student.firstname;
@@ -297,12 +297,11 @@ int doesThisStudentAlreadyExist(char * stuNum)
 	Student temp_student = { "", "", "", "/", 0.0, 0 };
 	ifstream file_students;
 	file_students.open("students.txt");
-	while(!file_students.eof())
+	while (!file_students.eof())
 	{
-		file_students >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
+		file_students >> temp_student.firstname >> temp_student.lastname >> temp_student.stuNum >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
 		if (strcmp(stuNum, temp_student.stuNum) == 0)
 		{
-			cout << "go fuck yourself";
 			return 1;
 		}
 	}
@@ -317,7 +316,10 @@ int newStudent(string firstname, string lastname, char stuNum[])
 {
 	Student temp_student = { "", "", "", "/", 0.0, 0 };
 	if (doesThisStudentAlreadyExist(stuNum) == 1)
+	{
+		cout << "This student couldn't be added because already a student with that student number exists!" << endl;
 		return -1;
+	}
 	temp_student.firstname = firstname;
 	temp_student.lastname = lastname;
 	strcpy(temp_student.stuNum, stuNum);
@@ -340,7 +342,7 @@ int main()
 	//	newStudent("salam","ali", "23456");
 	//	newStudent("hadi", "haji", "44456");
 	//	newStudent("peyman", "hosseini", "44477");
-	newStudent("hadi", "haji", "44456");
+	newStudent("hadi", "haji", "44656");
 	//createLinkListOfStudentsFile();
 	//firstPanel();
 	return 0;
