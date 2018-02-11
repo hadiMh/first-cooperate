@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
+#include <sstream>
 typedef struct student Student;
 typedef struct lesson Lesson;
 typedef struct cell Cell;
@@ -107,7 +107,6 @@ int doesThisLessonAlreadyExists(Lesson newSampleStructure, FILE*fileNewLesson)
 
 		if (strcmp(existingSamples.leassonCode, newSampleStructure.leassonCode) == 0)
 		{
-			cout << "THis lesson code already exists!" << endl;
 			return -1;
 		}
 	}
@@ -152,7 +151,8 @@ void createNewLesson()
 		cout << "This Record has been successfully added!" << endl;
 	else
 		cout << "Adding a Lesson failed due to entering existing Lesson code!" << endl;
-}/*
+}
+/*
 This lesson check wheter the entered code was used before or not
 if it existed in string passedlesson it returns -1
 and returns 1 if it isn't used before in passedlesson string
@@ -228,12 +228,32 @@ void linkListForAddingLessontoStudent(Student AddingToPassed)
 	file_students.close();
 }
 /*
+	finds the student that we want to add a grade to its passedlessons strings and returns its informations
+	existence of this student is check before in the functions that call this function 
+	so no need to worry about student existence!
+*/
+Student findTheStudent(char*studentNumber)
+{
+	Student temp_student = { "", "", "", "/", 0.0, 0 };
+	ifstream file_students;
+	file_students.open("students.txt");
+	while (!file_students.eof())
+	{
+		file_students >> temp_student.firstname >> temp_student.lastname >> temp_student.stuNum >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
+		if (strcmp(studentNumber, temp_student.stuNum) == 0)
+		{
+			file_students.close();
+			return temp_student;
+		}
+	}
+}
+/*
 This function adds a lesson code and it's gradeto a student's passedlesson string
 */
 int doesThisStudentAlreadyExist(char * stuNum);
-void addingLessonGradeToStudent(Student AddingToPassed, char* AddedLessonCode, float AddedLessonGrade)
+void addingLessonGradeToStudent(char*studentNumber, char* AddedLessonCode, float AddedLessonGrade)
 {
-
+	Student AddingToPassed = { "", "", "", "/", 0.0, 0 };
 	Lesson checkingLessonCode;
 	FILE *checkingLesson = fopen("lessons.txt", "r+");
 	strcpy(checkingLessonCode.leassonCode, AddedLessonCode);
@@ -247,6 +267,7 @@ void addingLessonGradeToStudent(Student AddingToPassed, char* AddedLessonCode, f
 		cout << "This Lesson Code doesn't exist!" << endl;
 		return;
 	}
+	AddingToPassed = findTheStudent(studentNumber);
 	if (extractingThePassedLessons(AddingToPassed, AddedLessonCode) == -1)
 	{
 		cout << "There is already a grade for this Lesson code for this student!" << endl;
@@ -391,9 +412,6 @@ void lessonDelete(char* wantingtobeDeletedLessonCode)
 	fclose(lessonsFile);
 	return;
 }
-/*
-Shows informations of the required student
-*/
 void function10(char *stunum)
 {
 
