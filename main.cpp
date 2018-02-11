@@ -105,6 +105,17 @@ void PreventMemoryLeakProblem(Cell*head)
 		delete temp;
 	}
 }
+void preventLeakfromLessons(LessonCell*head)
+{
+	LessonCell*temp;
+	while (head != NULL)
+	{
+		temp = head;
+		head = head->nextPtr;
+		delete temp;
+	}
+}
+
 /*
 This function check wheter the lesson we are trying to add already exists or not
 returns 1 if it doesn't exist
@@ -356,7 +367,7 @@ LessonCell* creatingLinkListOfLessonsFile()
 	while (!feof(file_lessons))
 	{
 		fscanf(file_lessons, "%s %s %d %s\n", &temp_lesson.leassonCode, &temp_lesson.lessonName, &temp_lesson.lessonUnit, &temp_lesson.lessonTeacher);
-		newCell = (LessonCell*)malloc(sizeof(Lesson));
+		newCell = new LessonCell;
 		if (head == NULL)
 		{
 			head = newCell;
@@ -422,6 +433,7 @@ void lessonDelete(char* wantingtobeDeletedLessonCode)
 	fclose(lessonsFile);
 	writingNewLessonsinFileAfterDeletion(head);
 	cout << "This record is Deleted successfully" << endl;
+	preventLeakfromLessons(head);
 	fclose(lessonsFile);
 	return;
 }
