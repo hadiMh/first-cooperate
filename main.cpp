@@ -152,8 +152,7 @@ void createNewLesson()
 		cout << "This Record has been successfully added!" << endl;
 	else
 		cout << "Adding a Lesson failed due to entering existing Lesson code!" << endl;
-}
-/*
+}/*
 This lesson check wheter the entered code was used before or not
 if it existed in string passedlesson it returns -1
 and returns 1 if it isn't used before in passedlesson string
@@ -166,7 +165,7 @@ int extractingThePassedLessons(Student AddingToPassed, char* AddedLessonCode)
 	for (int i = 0; i < AddingToPassed.passedLessons.size(); i++)
 	{
 		j = 0;
-		for (; AddingToPassed.passedLessons[i] != '*'; i++)
+		for (; AddingToPassed.passedLessons[i] != '*'&&i<AddingToPassed.passedLessons.length(); i++)
 		{
 			if (AddingToPassed.passedLessons[i] != '/')
 			{
@@ -174,7 +173,8 @@ int extractingThePassedLessons(Student AddingToPassed, char* AddedLessonCode)
 				j++;
 			}
 		}
-		for (; AddingToPassed.passedLessons[i] != '/'; i++);
+		extractedCode[j] = NULL;
+		for (; AddingToPassed.passedLessons[i] != '/'&&i<AddingToPassed.passedLessons.length(); i++);
 		if (strcmp(AddedLessonCode, extractedCode) == 0)
 		{
 			return -1;
@@ -188,6 +188,7 @@ and it helps us for calculating the average
 */
 int numofAddedLessonUnits(Lesson newSampleStructure, FILE*fileNewLesson)
 {
+	rewind(fileNewLesson);
 	int units;
 	Lesson existingSamples;
 	while (!feof(fileNewLesson))
@@ -227,13 +228,19 @@ void linkListForAddingLessontoStudent(Student AddingToPassed)
 	file_students.close();
 }
 /*
-This function adds a lesson to a student's passedlesson string
+This function adds a lesson code and it's gradeto a student's passedlesson string
 */
-void addingLessonToStudent(Student AddingToPassed, char* AddedLessonCode, float AddedLessonGrade, FILE* lessonFile)
+int doesThisStudentAlreadyExist(char * stuNum);
+void addingLessonGradeToStudent(Student AddingToPassed, char* AddedLessonCode, float AddedLessonGrade)
 {
 	Lesson checkingLessonCode;
 	FILE *checkingLesson = fopen("lessons.txt", "r+");
 	strcpy(checkingLessonCode.leassonCode, AddedLessonCode);
+	if (doesThisStudentAlreadyExist(AddingToPassed.stuNum) == 0)
+	{
+		cout << "There is no such a student!" << endl;
+		return;
+	}
 	if (doesThisLessonAlreadyExists(checkingLessonCode, checkingLesson) == 1)
 	{
 		cout << "This Lesson Code doesn't exist!" << endl;
@@ -244,12 +251,16 @@ void addingLessonToStudent(Student AddingToPassed, char* AddedLessonCode, float 
 		cout << "There is already a grade for this Lesson code for this student!" << endl;
 		return;
 	}
-	AddingToPassed.avg = ((float)(AddingToPassed.avg*AddingToPassed.unitsSum + numofAddedLessonUnits(checkingLessonCode, checkingLesson))) / (numofAddedLessonUnits(checkingLessonCode, checkingLesson) + AddingToPassed.unitsSum);
+	AddingToPassed.avg = ((float)(AddingToPassed.avg*AddingToPassed.unitsSum + numofAddedLessonUnits(checkingLessonCode, checkingLesson)*AddedLessonGrade)) / (numofAddedLessonUnits(checkingLessonCode, checkingLesson) + AddingToPassed.unitsSum);
 	AddingToPassed.unitsSum += numofAddedLessonUnits(checkingLessonCode, checkingLesson);
 	AddingToPassed.passedLessons += AddedLessonCode;
 	AddingToPassed.passedLessons += "*";
-	AddingToPassed.passedLessons += AddedLessonCode;
+	ostringstream convertor;
+	convertor << AddedLessonGrade;
+	string result(convertor.str());
+	AddingToPassed.passedLessons += result;
 	AddingToPassed.passedLessons += "/";
+	fclose(checkingLesson);
 	linkListForAddingLessontoStudent(AddingToPassed);
 	cout << "Lesson added for this student successfully!" << endl;
 }
