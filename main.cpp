@@ -43,6 +43,10 @@ Cell* createLinkListOfStudentsFile()
 		file_students >> temp_student.passedLessons;
 		file_students >> temp_student.avg;
 		file_students >> temp_student.unitsSum;
+		if (strcmp(temp_student.stuNum, "") == 0)
+		{
+			break;
+		}
 		newCell = new cell;
 		if (head == NULL)
 		{
