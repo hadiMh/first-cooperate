@@ -279,6 +279,25 @@ void functionNumber4()
 	}
 
 }
+/*
+By executing this function you'll be shown students whose GPA is lower than 12
+*/
+void functionNumber6()
+{
+	Cell * head, *current, *newCell;
+	head = createLinkListOfStudentsFile();
+	current = head;
+	Student temp;
+	for (Cell*i = head; i != NULL; i = i->nextPtr)
+	{
+		if (i->stuData.avg <12)
+		{
+			cout << "Name: " << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " ID Number: " << i->stuData.stuNum
+				<< " GPA: " << i->stuData.avg << endl;
+		}
+	}
+
+}
 void firstPanel()
 {
 	int inputNumber;
