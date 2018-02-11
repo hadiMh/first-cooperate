@@ -92,7 +92,18 @@ void createFilesForFirstExecution()
 	fclose(file_lessons);
 
 }
-
+/*
+	frees the memory we have used from heep
+*/
+void PreventMemoryLeakProblem(Cell*head)
+{
+	while (head != NULL)
+	{
+		temp = head;
+		head = head->nextPtr;
+		delete temp;
+	}
+}
 /*
 This function check wheter the lesson we are trying to add already exists or not
 returns 1 if it doesn't exist
@@ -225,14 +236,10 @@ void linkListForAddingLessontoStudent(Student AddingToPassed)
 		file_students << newCell->stuData.firstname << " " << newCell->stuData.lastname << " " << newCell->stuData.stuNum << " " << newCell->stuData.passedLessons << " " << newCell->stuData.avg << " " << newCell->stuData.unitsSum << '\n';
 		newCell = newCell->nextPtr;
 	}
-	while (head != NULL)
-	{
-		temp = head;
-		head = head->nextPtr;
-		delete temp;
-	}
+	PreventMemoryLeakProblem(head);
 	file_students.close();
 }
+
 /*
 	finds the student that we want to add a grade to its passedlessons strings and returns its informations
 	existence of this student is check before in the functions that call this function 
@@ -297,7 +304,7 @@ By executing this function you will be shown information of all the students sor
 */
 void functionNumber4()
 {
-	Cell * head, *current, *newCell;
+	Cell * head, *current, *newCell,*temp;
 	head = createLinkListOfStudentsFile();
 	current = head;
 	Student temp;
@@ -316,7 +323,7 @@ void functionNumber4()
 		cout << "Name: " << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " ID Number: " << i->stuData.stuNum
 			<< " GPA: " << i->stuData.avg << endl;
 	}
-
+	
 }
 /*
 By executing this function you'll be shown students whose GPA is lower than 12
