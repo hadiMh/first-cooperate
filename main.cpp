@@ -225,6 +225,12 @@ void linkListForAddingLessontoStudent(Student AddingToPassed)
 		file_students << newCell->stuData.firstname << " " << newCell->stuData.lastname << " " << newCell->stuData.stuNum << " " << newCell->stuData.passedLessons << " " << newCell->stuData.avg << " " << newCell->stuData.unitsSum << '\n';
 		newCell = newCell->nextPtr;
 	}
+	while (head != NULL)
+	{
+		temp = head;
+		head = head->nextPtr;
+		delete temp;
+	}
 	file_students.close();
 }
 /*
