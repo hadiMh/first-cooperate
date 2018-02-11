@@ -390,6 +390,21 @@ void lessonDelete(char* wantingtobeDeletedLessonCode)
 	fclose(lessonsFile);
 	return;
 }
+void function10(char *stunum)
+{
+
+	if (doesThisStudentAlreadyExist(stunum) == 0)
+	{
+		cout << "There is no such a student!" << endl;
+		return;
+	}
+	Cell*head, *i;
+	head = createLinkListOfStudentsFile();
+	for (i = head; strcmp(i->stuData.stuNum, stunum) != 0; i = i->nextPtr);
+	cout << "First Name :" << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " GPA: " << i->stuData.avg << endl;
+	cout << "Student Number: " << i->stuData.stuNum << endl;
+	cout << "Passed Lesson:  " << i->stuData.passedLessons << endl << endl << endl << endl;
+}
 void firstPanel()
 {
 	int inputNumber;
