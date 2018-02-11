@@ -323,7 +323,7 @@ void functionNumber4()
 		cout << "Name: " << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " ID Number: " << i->stuData.stuNum
 			<< " GPA: " << i->stuData.avg << endl;
 	}
-	
+	PreventMemoryLeakProblem(head);
 }
 /*
 By executing this function you'll be shown students whose GPA is lower than 12
@@ -342,7 +342,7 @@ void functionNumber6()
 				<< " GPA: " << i->stuData.avg << endl;
 		}
 	}
-
+	PreventMemoryLeakProblem(head);
 }
 /*
 This function creates a linklist from the lessons in the lessons.txt
@@ -438,6 +438,7 @@ void function10(char *stunum)
 	cout << "First Name :" << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " GPA: " << i->stuData.avg << endl;
 	cout << "Student Number: " << i->stuData.stuNum << endl;
 	cout << "Passed Lesson:  " << i->stuData.passedLessons << endl << endl << endl << endl;
+	PreventMemoryLeakProblem(head);
 }
 void firstPanel()
 {
