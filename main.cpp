@@ -97,6 +97,7 @@ void createFilesForFirstExecution()
 */
 void PreventMemoryLeakProblem(Cell*head)
 {
+	Cell*temp;
 	while (head != NULL)
 	{
 		temp = head;
