@@ -28,36 +28,46 @@ struct cell {
 	struct cell* nextPtr;
 };
 
+
 Cell* createLinkListOfStudentsFile()
 {
 	Student temp_student = { "", "", "", "", 0.0, 0 };
 	ifstream file_students;
 	file_students.open("students.txt");
-	Cell * head, *current, *newCell;
-	head = new cell;
-	head->nextPtr = NULL;
-	file_students >> temp_student.firstname;
-	file_students >> temp_student.lastname;
-	file_students >> temp_student.stuNum;
-	file_students >> temp_student.passedLessons;
-	file_students >> temp_student.avg;
-	file_students >> temp_student.unitsSum;
-	strcpy(head->stuData.stuNum, temp_student.stuNum);
-	head->stuData.firstname.assign(temp_student.firstname);
-	head->stuData.lastname.assign(temp_student.lastname);
-	head->stuData.passedLessons.assign(temp_student.passedLessons);
-	head->stuData.avg = temp_student.avg;
-	head->stuData.unitsSum = temp_student.unitsSum;
-	current = head;
-	for (string line; getline(cin, line); ) {
-		newCell = new Cell;
-		newCell->nextPtr = NULL;
-		current->nextPtr = newCell;
+	Cell * head=NULL, *current, *newCell;
+	while (!file_students.eof())
+	{
+		file_students >> temp_student.firstname;
+		file_students >> temp_student.lastname;
+		file_students >> temp_student.stuNum;
+		file_students >> temp_student.passedLessons;
+		file_students >> temp_student.avg;
+		file_students >> temp_student.unitsSum;
+		newCell = new cell;
+		if (head == NULL)
+		{
+			head = newCell;
+			head->nextPtr = NULL;
+			strcpy(head->stuData.stuNum, temp_student.stuNum);
+			head->stuData.firstname.assign(temp_student.firstname);
+			head->stuData.lastname.assign(temp_student.lastname);
+			head->stuData.passedLessons.assign(temp_student.passedLessons);
+			head->stuData.avg = temp_student.avg;
+			head->stuData.unitsSum = temp_student.unitsSum;
+		}
+		else
+		{
+			current->nextPtr = newCell;
+			strcpy(newCell->stuData.stuNum, temp_student.stuNum);
+			newCell->stuData.firstname.assign(temp_student.firstname);
+			newCell->stuData.lastname.assign(temp_student.lastname);
+			newCell->stuData.passedLessons.assign(temp_student.passedLessons);
+			newCell->stuData.avg = temp_student.avg;
+			newCell->stuData.unitsSum = temp_student.unitsSum;
+		}
 		current = newCell;
-		cout << line;
-		//line >> temp_student.stuNum >> temp_student.firstname >> temp_student.lastname >> temp_student.passedLessons >> temp_student.avg >> temp_student.unitsSum;
-		current->stuData = temp_student;
 	}
+	newCell->nextPtr = NULL;
 	file_students.close();
 	return head;
 }
@@ -335,53 +345,3 @@ int main()
 	//firstPanel();
 	return 0;
 }
-/*
-
-
-
-Cell* createLinkListOfStudentsFile()
-{
-Student temp_student = { "", "", "", "", 0.0, 0 };
-ifstream file_students;
-file_students.open("students.txt");
-Cell * head=NULL, *current, *newCell;
-while (!file_students.eof())
-{
-file_students >> temp_student.firstname;
-file_students >> temp_student.lastname;
-file_students >> temp_student.stuNum;
-file_students >> temp_student.passedLessons;
-file_students >> temp_student.avg;
-file_students >> temp_student.unitsSum;
-newCell = new cell;
-if (head == NULL)
-{
-head = newCell;
-head->nextPtr = NULL;
-strcpy(head->stuData.stuNum, temp_student.stuNum);
-head->stuData.firstname.assign(temp_student.firstname);
-head->stuData.lastname.assign(temp_student.lastname);
-head->stuData.passedLessons.assign(temp_student.passedLessons);
-head->stuData.avg = temp_student.avg;
-head->stuData.unitsSum = temp_student.unitsSum;
-}
-else
-{
-
-current->nextPtr = newCell;
-strcpy(newCell->stuData.stuNum, temp_student.stuNum);
-newCell->stuData.firstname.assign(temp_student.firstname);
-newCell->stuData.lastname.assign(temp_student.lastname);
-newCell->stuData.passedLessons.assign(temp_student.passedLessons);
-newCell->stuData.avg = temp_student.avg;
-newCell->stuData.unitsSum = temp_student.unitsSum;
-}
-current = newCell;
-}
-newCell->nextPtr = NULL;
-file_students.close();
-return head;
-}
-
-
-*/
