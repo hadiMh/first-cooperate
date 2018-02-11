@@ -304,7 +304,7 @@ By executing this function you will be shown information of all the students sor
 */
 void functionNumber4()
 {
-	Cell * head, *current, *newCell,*temp;
+	Cell * head, *current, *newCell;
 	head = createLinkListOfStudentsFile();
 	current = head;
 	Student temp;
