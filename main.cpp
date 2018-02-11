@@ -5,6 +5,7 @@
 typedef struct student Student;
 typedef struct lesson Lesson;
 typedef struct cell Cell;
+typedef struct lessonCell LessonCell;
 using namespace std;
 
 struct student {
@@ -27,7 +28,11 @@ struct cell {
 	struct student stuData;
 	struct cell* nextPtr;
 };
-
+struct lessonCell
+{
+	struct lesson lessonData;
+	struct lessonCell* nextPtr;
+};
 
 Cell* createLinkListOfStudentsFile()
 {
@@ -247,6 +252,32 @@ void addingLessonToStudent(Student AddingToPassed, char* AddedLessonCode, float 
 	AddingToPassed.passedLessons += "/";
 	linkListForAddingLessontoStudent(AddingToPassed);
 	cout << "Lesson added for this student successfully!" << endl;
+}
+/*
+By executing this function you will be shown information of all the students sorted by their last name
+*/
+void functionNumber4()
+{
+	Cell * head, *current, *newCell;
+	head = createLinkListOfStudentsFile();
+	current = head;
+	Student temp;
+	for (Cell*i = head; i->nextPtr != NULL; i = i->nextPtr)
+	{
+		for (Cell*j = i->nextPtr; j != NULL; j = j->nextPtr)
+			if (j->stuData.lastname < i->stuData.lastname || (j->stuData.lastname == i->stuData.lastname&&j->stuData.firstname<i->stuData.firstname))
+			{
+				temp = i->stuData;
+				i->stuData = j->stuData;
+				j->stuData = temp;
+			}
+	}
+	for (Cell*i = head; i != NULL; i = i->nextPtr)
+	{
+		cout << "Name: " << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " ID Number: " << i->stuData.stuNum
+			<< " GPA: " << i->stuData.avg << endl;
+	}
+
 }
 void firstPanel()
 {
