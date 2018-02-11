@@ -233,6 +233,7 @@ This function adds a lesson code and it's gradeto a student's passedlesson strin
 int doesThisStudentAlreadyExist(char * stuNum);
 void addingLessonGradeToStudent(Student AddingToPassed, char* AddedLessonCode, float AddedLessonGrade)
 {
+
 	Lesson checkingLessonCode;
 	FILE *checkingLesson = fopen("lessons.txt", "r+");
 	strcpy(checkingLessonCode.leassonCode, AddedLessonCode);
@@ -390,6 +391,9 @@ void lessonDelete(char* wantingtobeDeletedLessonCode)
 	fclose(lessonsFile);
 	return;
 }
+/*
+Shows informations of the required student
+*/
 void function10(char *stunum)
 {
 
