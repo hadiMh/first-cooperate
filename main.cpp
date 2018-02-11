@@ -398,7 +398,6 @@ void lessonDelete(char* wantingtobeDeletedLessonCode)
 	{
 		for (i = head; strcmp(i->nextPtr->lessonData.leassonCode, wantingtobeDeletedLessonCode) != 0; i = i->nextPtr);
 		temp = i->nextPtr->nextPtr;
-		free(i->nextPtr);
 		i->nextPtr = temp;
 	}
 	else
