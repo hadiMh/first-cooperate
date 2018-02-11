@@ -309,6 +309,87 @@ void functionNumber6()
 	}
 
 }
+/*
+This function creates a linklist from the lessons in the lessons.txt
+*/
+LessonCell* creatingLinkListOfLessonsFile()
+{
+	Lesson temp_lesson = { "", "",0,"" };
+	FILE* file_lessons = fopen("lessons.txt", "r+");
+	LessonCell * head = NULL, *current, *newCell;
+	while (!feof(file_lessons))
+	{
+		fscanf(file_lessons, "%s %s %d %s\n", &temp_lesson.leassonCode, &temp_lesson.lessonName, &temp_lesson.lessonUnit, &temp_lesson.lessonTeacher);
+		newCell = (LessonCell*)malloc(sizeof(Lesson));
+		if (head == NULL)
+		{
+			head = newCell;
+			strcpy(head->lessonData.leassonCode, temp_lesson.leassonCode);
+			strcpy(head->lessonData.lessonName, temp_lesson.lessonName);
+			strcpy(head->lessonData.lessonTeacher, temp_lesson.lessonTeacher);
+			head->lessonData.lessonUnit = temp_lesson.lessonUnit;
+		}
+		else
+		{
+			strcpy(newCell->lessonData.leassonCode, temp_lesson.leassonCode);
+			strcpy(newCell->lessonData.lessonName, temp_lesson.lessonName);
+			strcpy(newCell->lessonData.lessonTeacher, temp_lesson.lessonTeacher);
+			newCell->lessonData.lessonUnit = temp_lesson.lessonUnit;
+			current->nextPtr = newCell;
+		}
+		current = newCell;
+	}
+	newCell->nextPtr = NULL;
+	fclose(file_lessons);
+	return head;
+}
+/*
+This function is called to write the new lesson(after deleting one of them) on the related file(lessons.txt)
+*/
+void writingNewLessonsinFileAfterDeletion(LessonCell*head)
+{
+	FILE*lessonsFile = fopen("lessons.txt", "w");
+	for (LessonCell*temp = head; temp != NULL; temp = temp->nextPtr)
+	{
+		fprintf(lessonsFile, "%s %s %d %s\n", temp->lessonData.leassonCode, temp->lessonData.lessonName, temp->lessonData.lessonUnit, temp->lessonData.lessonTeacher);
+	}
+	fclose(lessonsFile);
+}
+/*
+This function Deletes a Lesson from the related file(lessons.txt)
+*/
+void lessonDelete(char* wantingtobeDeletedLessonCode)
+{
+	FILE*lessonsFile = fopen("lessons.txt", "r+");
+	Lesson checkExistence = { "","",0,"" };
+	strcpy(checkExistence.leassonCode, wantingtobeDeletedLessonCode);
+	if (doesThisLessonAlreadyExists(checkExistence, lessonsFile) == 1)
+	{
+		cout << "There is no such a lesson code to delete!" << endl;
+		fclose(lessonsFile);
+		return;
+	}
+	LessonCell *head, *temp;
+	LessonCell*i;
+	head = creatingLinkListOfLessonsFile();
+	if (strcmp(head->lessonData.leassonCode, wantingtobeDeletedLessonCode) != 0)
+	{
+		for (i = head; strcmp(i->nextPtr->lessonData.leassonCode, wantingtobeDeletedLessonCode) != 0; i = i->nextPtr);
+		temp = i->nextPtr->nextPtr;
+		free(i->nextPtr);
+		i->nextPtr = temp;
+	}
+	else
+	{
+		temp = head->nextPtr;
+		head = temp;
+	}
+	fclose(lessonsFile);
+	writingNewLessonsinFileAfterDeletion(head);
+	cout << "This record is Deleted successfully" << endl;
+	fclose(lessonsFile);
+	return;
+}
 void firstPanel()
 {
 	int inputNumber;
