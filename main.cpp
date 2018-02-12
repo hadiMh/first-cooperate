@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include<string.h>
 #include <fstream>
 #include <sstream>
 typedef struct student Student;
@@ -81,6 +82,20 @@ Cell* createLinkListOfStudentsFile()
 	return head;
 }
 
+void printLinkListOfStudentsInStudentsFile(Cell* head)
+{
+	FILE* fileName = fopen("students.txt", "w");
+	fclose(fileName);
+	fstream file_students;
+	file_students.open("students.txt");
+	for (Cell* i = head; i != NULL; i = i->nextPtr)
+	{
+		file_students.seekp(0, ios::end);
+		file_students << i->stuData.firstname << " " << i->stuData.lastname << " " << i->stuData.stuNum << " " << i->stuData.passedLessons << " " << i->stuData.avg << " " << i->stuData.unitsSum << '\n';
+	}
+	file_students.close();
+}
+
 /* Creating 'students' file and 'lessons' file at the very first execution.
 This function should be executed once at the very first execution of the software so be careful.
 After firs execution of the software comment this function's name in the 'main' scope*/
@@ -93,7 +108,7 @@ void createFilesForFirstExecution()
 
 }
 /*
-	frees the memory we have used from heep
+frees the memory we have used from heep
 */
 void PreventMemoryLeakProblem(Cell*head)
 {
@@ -105,6 +120,37 @@ void PreventMemoryLeakProblem(Cell*head)
 		delete temp;
 	}
 }
+
+/* delete cell from linkList that have this stuNum. This function returns 'Cell* head' */
+Cell* deleteStudentCellFromLinkListWithThisStuNum(char stuNum[])
+{
+	Cell* head, *current, *previous;
+	head = createLinkListOfStudentsFile();
+	if (strcmp(head->stuData.stuNum, stuNum) == 0)
+	{
+		current = head->nextPtr;
+		free(head);
+		head = current;
+		return head;
+	}
+
+	for (Cell* i = head; i != NULL; i = i->nextPtr)
+	{
+		if (strcmp(i->stuData.stuNum, stuNum) == 0)
+		{
+			previous->nextPtr = i->nextPtr;
+			free(i);
+			printLinkListOfStudentsInStudentsFile(head);
+			return head;
+		}
+		previous = i;
+	}
+
+
+	PreventMemoryLeakProblem(head);
+
+}
+
 void preventLeakfromLessons(LessonCell*head)
 {
 	LessonCell*temp;
@@ -253,9 +299,9 @@ void linkListForAddingLessontoStudent(Student AddingToPassed)
 }
 
 /*
-	finds the student that we want to add a grade to its passedlessons strings and returns its informations
-	existence of this student is check before in the functions that call this function 
-	so no need to worry about student existence!
+finds the student that we want to add a grade to its passedlessons strings and returns its informations
+existence of this student is check before in the functions that call this function
+so no need to worry about student existence!
 */
 Student findTheStudent(char*studentNumber)
 {
@@ -337,6 +383,84 @@ void functionNumber4()
 	}
 	PreventMemoryLeakProblem(head);
 }
+
+/* This function sorts all the students by their stuNum and prints them in the console */
+void sortWithStuNum()
+{
+	Student tempStudent;
+	Cell * head, *current, *newCell;
+	head = createLinkListOfStudentsFile();
+	for (current = head; current != NULL; current = current->nextPtr)
+	{
+		for (Cell* i = current->nextPtr; i != NULL; i = i->nextPtr)
+		{
+			if (strcmp(current->stuData.stuNum,i->stuData.stuNum) < 0)
+			{
+				tempStudent=current->stuData;
+				current->stuData = i->stuData;
+				i->stuData = tempStudent;
+			}
+		}
+	}
+	for (Cell* i = head; i != NULL; i = i->nextPtr)
+	{
+		cout << "Name: " << i->stuData.firstname << " Last Name: " << i->stuData.lastname << " ID Number: " << i->stuData.stuNum
+			<< " GPA: " << i->stuData.avg << endl;
+	}
+	PreventMemoryLeakProblem(head);
+}
+
+/* This function prints the first three person gained the toppest avg */
+void showThreeTopAvgStudents()
+{
+	Student tempStudent, firstStudent, secondStudent, thirdStudent;
+	firstStudent.avg = secondStudent.avg = thirdStudent.avg = 0;
+	Cell * head, *current, *newCell;
+	head = createLinkListOfStudentsFile();
+	for (Cell* i = head; i != NULL; i = i->nextPtr)
+	{
+		if (i->stuData.avg > firstStudent.avg)
+		{
+			thirdStudent = secondStudent;
+			secondStudent = firstStudent;
+			firstStudent = i->stuData;
+		}
+		else if (i->stuData.avg > secondStudent.avg)
+		{
+			thirdStudent = secondStudent;
+			secondStudent = i->stuData;
+		}
+		else if (i->stuData.avg > thirdStudent.avg)
+			thirdStudent = i->stuData;
+	}
+	tempStudent = firstStudent;
+	cout << "1- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
+		<< " GPA: " << tempStudent.avg << endl;
+	tempStudent = secondStudent;
+	cout << "2- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
+		<< " GPA: " << tempStudent.avg << endl;
+	tempStudent = thirdStudent;
+	cout << "3- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
+		<< " GPA: " << tempStudent.avg << endl;
+	PreventMemoryLeakProblem(head);
+}
+
+/* This function shows the students that their unitsSum is lower than 14 */
+void showStudentsWithUnitsSumUnder14()
+{
+	Student tempStudent;
+	Cell* head, *current, *newCell;
+	head = createLinkListOfStudentsFile();
+	for (Cell * i = head; i != NULL; i = i->nextPtr)
+	{
+		if (i->stuData.unitsSum < 14)
+		{
+			tempStudent = i->stuData;
+			cout << "1- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum<< " GPA: " << tempStudent.avg << endl;
+		}
+	}
+}
+
 /*
 By executing this function you'll be shown students whose GPA is lower than 12
 */
@@ -361,7 +485,7 @@ This function creates a linklist from the lessons in the lessons.txt
 */
 LessonCell* creatingLinkListOfLessonsFile()
 {
-	Lesson temp_lesson = { "", "",0,"" };
+	Lesson temp_lesson = { "", "", 0, "" };
 	FILE* file_lessons = fopen("lessons.txt", "r+");
 	LessonCell * head = NULL, *current, *newCell;
 	while (!feof(file_lessons))
@@ -390,6 +514,8 @@ LessonCell* creatingLinkListOfLessonsFile()
 	fclose(file_lessons);
 	return head;
 }
+
+
 /*
 This function is called to write the new lesson(after deleting one of them) on the related file(lessons.txt)
 */
@@ -408,7 +534,7 @@ This function Deletes a Lesson from the related file(lessons.txt)
 void lessonDelete(char* wantingtobeDeletedLessonCode)
 {
 	FILE*lessonsFile = fopen("lessons.txt", "r+");
-	Lesson checkExistence = { "","",0,"" };
+	Lesson checkExistence = { "", "", 0, "" };
 	strcpy(checkExistence.leassonCode, wantingtobeDeletedLessonCode);
 	if (doesThisLessonAlreadyExists(checkExistence, lessonsFile) == 1)
 	{
@@ -546,13 +672,21 @@ int newStudent(string firstname, string lastname, char stuNum[])
 int main()
 {
 	/*The line below should be executed just once in the very first execution. then should be commented.*/
-	//	createFilesForFirstExecution();
+	//createFilesForFirstExecution();
 	//	newStudent("peymna", "hs", "12345");
 	//	newStudent("salam","ali", "23456");
 	//	newStudent("hadi", "haji", "44456");
-	//	newStudent("peyman", "hosseini", "44477");
-	newStudent("hadi", "haji", "44656");
+	//newStudent("peyman", "hosseini", "44497");
+	//newStudent("hadi1", "haji1", "44956");
+	//newStudent("hadi2", "haji2", "34656");
+	//newStudent("hadi3", "haji3", "34654");
+	//newStudent("hadi4", "haji4", "36656");
+	//showThreeTopAvgStudents();
+	//showStudentsWithUnitsSumUnder14();
+	//sortWithStuNum();
 	//createLinkListOfStudentsFile();
 	//firstPanel();
+	char stuNum[7] = "44956";
+	deleteStudentCellFromLinkListWithThisStuNum(stuNum);
 	return 0;
 }
