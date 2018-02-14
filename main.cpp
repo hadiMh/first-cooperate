@@ -78,7 +78,7 @@ Cell* createLinkListOfStudentsFile()
 		}
 		current = newCell;
 	}
-	if (strcmp(newCell->stuData.stuNum, "") != 0)
+	if (strcmp(temp_student.stuNum, "") != 0)
 	{
 		newCell->nextPtr = NULL;
 	}
@@ -451,14 +451,35 @@ void showThreeTopAvgStudents()
 			thirdStudent = i->stuData;
 	}
 	tempStudent = firstStudent;
-	cout << "1- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
-		<< " GPA: " << tempStudent.avg << endl;
+	if (tempStudent.avg > 0)
+	{
+		cout << "1- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
+			<< " GPA: " << tempStudent.avg << endl;
+	}
+	else
+	{
+		cout << "Not valid grades yet to show the first student" << endl;
+	}
 	tempStudent = secondStudent;
-	cout << "2- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
-		<< " GPA: " << tempStudent.avg << endl;
+	if (tempStudent.avg > 0)
+	{
+		cout << "2- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
+			<< " GPA: " << tempStudent.avg << endl;
+	}
+	else
+	{
+		cout << "Not valid grades exist to show the second student" << endl;
+	}
 	tempStudent = thirdStudent;
-	cout << "3- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
-		<< " GPA: " << tempStudent.avg << endl;
+	if (tempStudent.avg > 0)
+	{
+		cout << "3- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum
+			<< " GPA: " << tempStudent.avg << endl;
+	}
+	else
+	{
+		cout << "Not valid grades exist to show the third student" << endl;
+	}
 	PreventMemoryLeakProblem(head);
 }
 
