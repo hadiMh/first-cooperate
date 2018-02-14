@@ -2,6 +2,7 @@
 #include <string>
 #include<string.h>
 #include <fstream>
+#include <windows.h>
 #include <sstream>
 typedef struct student Student;
 typedef struct lesson Lesson;
@@ -40,7 +41,7 @@ Cell* createLinkListOfStudentsFile()
 	Student temp_student = { "", "", "", "", 0.0, 0 };
 	ifstream file_students;
 	file_students.open("students.txt");
-	Cell * head = NULL, *current, *newCell;
+	Cell * head = NULL, *current, *newCell = NULL;
 	while (!file_students.eof())
 	{
 		file_students >> temp_student.firstname;
@@ -77,11 +78,14 @@ Cell* createLinkListOfStudentsFile()
 		}
 		current = newCell;
 	}
-	newCell->nextPtr = NULL;
+	if (strcmp(newCell->stuData.stuNum, "") != 0)
+	{
+		newCell->nextPtr = NULL;
+	}
 	file_students.close();
 	return head;
 }
-
+int newStudent(string firstname, string lastname, char stuNum[]);
 void printLinkListOfStudentsInStudentsFile(Cell* head)
 {
 	FILE* fileName = fopen("students.txt", "w");
@@ -126,11 +130,23 @@ Cell* deleteStudentCellFromLinkListWithThisStuNum(char stuNum[])
 {
 	Cell* head, *current, *previous;
 	head = createLinkListOfStudentsFile();
+
 	if (strcmp(head->stuData.stuNum, stuNum) == 0)
 	{
 		current = head->nextPtr;
 		free(head);
 		head = current;
+		if (current == NULL)
+		{
+			FILE* empty = fopen("students.txt", "w");
+			fclose(empty);
+
+		}
+		else
+		{
+			printLinkListOfStudentsInStudentsFile(current);
+		}
+		cout << "Deleted the student successfully" << endl;
 		return head;
 	}
 
@@ -141,11 +157,12 @@ Cell* deleteStudentCellFromLinkListWithThisStuNum(char stuNum[])
 			previous->nextPtr = i->nextPtr;
 			free(i);
 			printLinkListOfStudentsInStudentsFile(head);
+			cout << "Deleted the student successfully" << endl;
 			return head;
 		}
 		previous = i;
 	}
-
+	cout << "No sudents with the entered student number existed" << endl;
 
 	PreventMemoryLeakProblem(head);
 
@@ -394,9 +411,9 @@ void sortWithStuNum()
 	{
 		for (Cell* i = current->nextPtr; i != NULL; i = i->nextPtr)
 		{
-			if (strcmp(current->stuData.stuNum,i->stuData.stuNum) < 0)
+			if (strcmp(current->stuData.stuNum, i->stuData.stuNum) < 0)
 			{
-				tempStudent=current->stuData;
+				tempStudent = current->stuData;
 				current->stuData = i->stuData;
 				i->stuData = tempStudent;
 			}
@@ -456,7 +473,7 @@ void showStudentsWithUnitsSumUnder14()
 		if (i->stuData.unitsSum < 14)
 		{
 			tempStudent = i->stuData;
-			cout << "1- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum<< " GPA: " << tempStudent.avg << endl;
+			cout << "1- " << "Name: " << tempStudent.firstname << " Last Name: " << tempStudent.lastname << " ID Number: " << tempStudent.stuNum << " GPA: " << tempStudent.avg << endl;
 		}
 	}
 }
@@ -579,49 +596,105 @@ void function10(char *stunum)
 	cout << "Passed Lesson:  " << i->stuData.passedLessons << endl << endl << endl << endl;
 	PreventMemoryLeakProblem(head);
 }
+enum colors { darkblue = 1, darkgreen, lessdarkblue, darkred, darkpink, darkyellow, darkwhite, gray, blue, green, blueandgreen, red, pink, yellow, white };
+HANDLE hconsole;
 void firstPanel()
 {
+	string stu_first_name, stu_last_name;
+	char stunum[6];
+	char studentNumber[6];
+	char lessonCode[8];
+	float lessonGrade;
+	char deletingStudentNumber[8];
+	char student_Number[6];
+	char deletingLessonCode[8];
 	int inputNumber;
-	cout << " Please choose an action:" << endl << endl;
-	cout << " 1 - new student" << endl;
-	cout << " 2 - lesson insertion for a student" << endl;
-	cout << " 3 - new lesson" << endl;
-	cout << " 4 - " << endl;
-	cout << " 5 - " << endl;
-	cout << " 6 - " << endl;
-	cout << " 7 - " << endl;
-	cout << " 8 - " << endl;
-	cout << " 9 - delete a student" << endl;
-	cout << " 10- show a student information" << endl;
-	cout << " 11- delete a lesson" << endl;
-	cout << " 12- exit" << endl;
-	cin >> inputNumber;
-	switch (inputNumber)
+	hconsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	while (1)
 	{
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		break;
-	case 6:
-		break;
-	case 7:
-		break;
-	case 8:
-		break;
-	case 9:
-		break;
-	case 10:
-		break;
-	case 11:
-		break;
-	case 12:
-		break;
+		SetConsoleTextAttribute(hconsole, white);
+		cout << " Please choose an action:" << endl << endl;
+		SetConsoleTextAttribute(hconsole, pink);
+		cout << " 1 - Add a new student to students.txt" << endl;
+		cout << " 2 - Insert a lesson for a student" << endl;
+		cout << " 3 - Add a new lesson to lessons.txt" << endl;
+		cout << " 4 - Show Name,Student number and GPA of all the students sorted by their lastname" << endl;
+		cout << " 5 - Show Name,Student number and GPA of all the students sorted by their student number" << endl;
+		cout << " 6 - Show Name,Student number and GPA of all the students whose GPA is lower than 12" << endl;
+		cout << " 7 - Show Name,Student number and GPA of The first,The second,and The third Student according to GPA" << endl;
+		cout << " 8 - Show Name,Student number and GPA of all the students that have passed less than 14 units " << endl;
+		cout << " 9 - delete a student from students.txt" << endl;
+		cout << " 10 - show a student information" << endl;
+		cout << " 11 - delete a lesson from lessons.txt" << endl;
+		cout << " 12 - exit" << endl;
+		SetConsoleTextAttribute(hconsole, darkwhite);
+		cin >> inputNumber;
+		cin.ignore(10000, '\n');
+		switch (inputNumber)
+		{
+		case 1:
+			cout << "Please enter the student first name :" << endl;
+			cin >> stu_first_name;
+			cin.ignore(10000, '\n');
+			cout << "Now please enter the student last name :" << endl;
+			cin >> stu_last_name;
+			cin.ignore(10000, '\n');
+			cout << "And finally you shoul enter the student number :" << endl;
+			cin >> stunum;
+			cin.ignore(10000, '\n');
+			newStudent(stu_first_name, stu_last_name, stunum);
+			break;
+		case 2:
+
+			cout << "First enter the student number you want to add a Grade for" << endl;
+			cin >> studentNumber;
+			cin.ignore(10000, '\n');
+			cout << "Now please enter the lesson code " << endl;
+			cin >> lessonCode;
+			cin.ignore(10000, '\n');
+			cout << "And Finally please enter the Grade you want to add for this student" << endl;
+			cin >> lessonGrade;
+			addingLessonGradeToStudent(studentNumber, lessonCode, lessonGrade);
+			break;
+		case 3:createNewLesson();
+			break;
+		case 4:functionNumber4();
+			break;
+		case 5:sortWithStuNum();
+			break;
+		case 6:functionNumber6();
+			break;
+		case 7:showThreeTopAvgStudents();
+			break;
+		case 8: showStudentsWithUnitsSumUnder14();
+			break;
+		case 9:
+			cout << "Please enter the Student number you want to delete it's record" << endl;
+			cin >> deletingStudentNumber;
+			cin.ignore(10000, '\n');
+			if (doesThisStudentAlreadyExist(deletingStudentNumber) == 0)
+			{
+				cout << "There is no such student to delete" << endl;
+			}
+			else
+				deleteStudentCellFromLinkListWithThisStuNum(deletingStudentNumber);
+			break;
+		case 10:
+
+			cout << "Please enter the student number that you want to see his/her informations" << endl;
+			cin >> student_Number;
+			cin.ignore(10000, '\n');
+			function10(student_Number);
+			break;
+		case 11:
+			cout << "Please enter the lesson code you want to delete it's record" << endl;
+			cin >> deletingLessonCode;
+			cin.ignore(10000, '\n');
+			lessonDelete(deletingLessonCode);
+			break;
+		case 12:
+			exit(0);
+		}
 	}
 }
 /* This function checks if a student with the "stuNum" student number exist in 'students.txt database or not.
@@ -666,27 +739,16 @@ int newStudent(string firstname, string lastname, char stuNum[])
 	file_students.seekp(0, ios::end);
 	file_students << temp_student.firstname << " " << temp_student.lastname << " " << temp_student.stuNum << " " << temp_student.passedLessons << " " << temp_student.avg << " " << temp_student.unitsSum << '\n';
 	file_students.close();
+	cout << "Student added successfully" << endl;
 	return 1;
 }
 
 int main()
 {
-	/*The line below should be executed just once in the very first execution. then should be commented.*/
-	//createFilesForFirstExecution();
-	//	newStudent("peymna", "hs", "12345");
-	//	newStudent("salam","ali", "23456");
-	//	newStudent("hadi", "haji", "44456");
-	//newStudent("peyman", "hosseini", "44497");
-	//newStudent("hadi1", "haji1", "44956");
-	//newStudent("hadi2", "haji2", "34656");
-	//newStudent("hadi3", "haji3", "34654");
-	//newStudent("hadi4", "haji4", "36656");
-	//showThreeTopAvgStudents();
-	//showStudentsWithUnitsSumUnder14();
-	//sortWithStuNum();
-	//createLinkListOfStudentsFile();
-	//firstPanel();
-	char stuNum[7] = "44956";
-	deleteStudentCellFromLinkListWithThisStuNum(stuNum);
+	/*
+	Please notice createFilesForFirstExecution must be executed only once and then you should comment it
+	*/
+	/*only one time execute this*/createFilesForFirstExecution();/*only one time execute this*/
+	firstPanel();
 	return 0;
 }
